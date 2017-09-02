@@ -58,30 +58,70 @@ const repository = (db) => {
     })
   }
 
-    const addPatient = (patient) => {
+  const addPatient = (patient) => {
+      return addUser(patient,patients_collection);
+   }
+
+  const addDoctor = (doctor) => {
+    return addUser(doctor,doctors_collection);
+  }
+
+  const addUser = (user,collection) =>{
     return new Promise((resolve, reject) => {
-      db.collection('patients').insertOne(patient, (err, patient) => {
+      collection.insertOne(user, (err, user) => {
         if (err) {
           reject(new Error('An error occuered registring a user booking, err:' + err))
         }
-        resolve(patient)
+        resolve(user)
       })
     })
   }
 
-    const updatePatient = (patientId,patient) => {
-    return new Promise((resolve, reject) => {
-      const patientToUpdate = {
-        userid:patientId
+  const updatePatient = (userId,patient) => {
+    const patientToUpdate = {
+        userId:userId
       };
-      db.collection('patients').update(patientToUpdate,patient, (err, patient) => {
+    return updateUser(patientToUpdate,patient,patients_collection);
+  }
+
+  const updateDoctor = (userId,doctor) => {
+    const doctorToUpdate = {
+        userId:userId
+      };
+    return updateUser(doctorToUpdate,doctor,doctors_collection);
+  }
+
+const updateUser = (user,newUser,collection) => {
+  return new Promise((resolve, reject) => {
+      doctors_collection.update(user,newUser, (err, newUser) => {
         if (err) {
-          reject(new Error('An error occuered registring a user booking, err:' + err))
+          reject(new Error('An error occuered registring a user, err:' + err))
         }
-        resolve(patient)
+        resolve(newUser)
       })
     })
+}
+
+const deletePatient = (patientId) => {
+    var user = {userId: patientId};
+    return deleteUser(user,patients_collection)
   }
+
+  const deleteDoctor = (patientId) => {
+    var user = {userId: patientId};
+    return deleteUser(user,doctors_collection)
+  }
+
+const deleteUser = (user,collection) =>{
+  return new Promise((resolve, reject) => {
+      collection.remove(user, (err, patient) => {
+        if (err) {
+            reject(new Error('An error occuered deleting User, err:' + err))
+          }
+      resolve(patient)
+      })
+  })
+}
 
   const disconnect = () => {
     db.close()
@@ -92,8 +132,12 @@ const repository = (db) => {
     getPatientByUserId,
     addPatient,
     updatePatient,
+    deletePatient,
     getAllDoctors,
     getDoctorsByUserId,
+    addDoctor,
+    updateDoctor,
+    deleteDoctor,
     disconnect
   })
 }

@@ -17,16 +17,20 @@ module.exports = (app, options) => {
   })
 
    app.post('/patients', (req, res, next) => {
-     console.log(req.body);
     repo.addPatient(req.body).then(patient => {
       res.status(status.OK).json(patient)
     }).catch(next)
   })
 
   app.put('/patients/:userId', (req, res, next) => {
-     console.log(req.body);
     repo.updatePatient(req.params.userId,req.body).then(patient => {
       res.status(status.OK).json(patient)
+    }).catch(next)
+  })
+
+app.delete('/patients/"userId', (req,res,next) => {
+  repo.deletePatient(req.params.userId).then(patient => {
+    res.status(status.OK).json("deleted patient successfully")
     }).catch(next)
   })
 }
