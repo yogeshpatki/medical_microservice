@@ -1,0 +1,60 @@
+#%RAML 1.0
+title: Movies Service
+version: v1
+baseUri: /movies
+
+types:
+  Patient:
+    properties:
+    #% missing a referral property with type Doctor (or list of doctors)
+      tenantId: string
+      userId: string
+      customerId: string
+      portalId: string
+      status: string
+      sysState: string
+      dateCreated: timestamp
+      dateUpdated: timestamp
+      whoCreated: string
+      whoUpdated: timestamp
+      firstName: string
+      lastName: string
+      fullName: string
+      phoneMobile: string
+      email: string
+    example:
+      tenantId: string
+      userId: string
+      customerId: string
+      portalId: string
+      status: string
+      sysState: string
+      dateCreated: timestamp
+      dateUpdated: timestamp
+      whoCreated: string
+      whoUpdated: timestamp
+      firstName: string
+      lastName: string
+      fullName: string
+      phoneMobile: string
+      email: string
+
+  MoviePremieres:
+    type: Movie []
+
+
+resourceTypes:
+  GET:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: <<item>>
+
+/:
+  /premieres:
+    type:  { GET: {item : MoviePremieres } }
+
+  /{id}:
+    type:  { GET: {item : Movie } }
