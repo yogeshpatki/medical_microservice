@@ -1,0 +1,175 @@
+{
+	"variables": [],
+	"info": {
+		"name": "PatientsTests",
+		"_postman_id": "93d4a8f0-3c12-9303-2118-1a9e81a5dfd7",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Patient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var creationSuccessfulTest = responseCode.code === 200;",
+							"tests[\"200 response for on successful creation\"] =  responseCode.code === 200;",
+							"",
+							"if(creationSuccessfulTest){",
+							"    tests[\"patient created successfully\"] =  responseBody.has(\"patient successfully created\");",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/patients/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"firstName\" : \"Naman\",\n\t\"lastName\" : \"Ojha\",\n\t\"userId\" : \"1122\",\n\t\"tenantId\" : \"3456\"\n}"
+				},
+				"description": "creates a patient"
+			},
+			"response": []
+		},
+		{
+			"name": "can find the created patient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"finds recently created patient\"] = jsonData.firstName === \"Naman\";",
+							"tests[\"patient full name is a combination of first and last name\"] = jsonData.fullName === jsonData.firstName + ' ' + jsonData.lastName;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/patients/1122",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "get all patients"
+			},
+			"response": []
+		},
+		{
+			"name": "update patient details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var updateSuccessfulTest = responseCode.code === 200;",
+							"tests[\"200 response for on successful creation\"] = updateSuccessfulTest",
+							"if(updateSuccessfulTest){",
+							"    tests[\"patient created successfullt\"] =  responseBody.has(\"patient successfully updated\");",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/patients/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"firstName\" : \"Pragyan\",\n\t\"lastName\" : \"Ojha\",\n\t\"userId\" : \"1122\",\n\t\"tenantId\" : \"3456\"\n}"
+				},
+				"description": "creates a patient"
+			},
+			"response": []
+		},
+		{
+			"name": "verifies that patient details are updated",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"finds recently created patient\"] = jsonData.firstName === \"Pragyan\";",
+							"tests[\"patient full name is a combination of first and last name\"] = jsonData.fullName === jsonData.firstName + ' ' + jsonData.lastName;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/patients/1122",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "get all patients"
+			},
+			"response": []
+		},
+		{
+			"name": "Deletes existing patient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"deletes the patient\"] = responseBody === \"deleted patient successfully\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/patients/1122",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "verify that patient is deleted from system",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"cannot find patient that has been deleted\"] = responseCode.code === 404;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/patients/1122",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

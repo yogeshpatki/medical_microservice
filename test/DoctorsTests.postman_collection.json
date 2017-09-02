@@ -1,0 +1,258 @@
+{
+	"variables": [],
+	"info": {
+		"name": "DoctorsTests",
+		"_postman_id": "c848d20d-6e84-838f-0485-379a0bdc1e5a",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Gives A List Of Doctors in collection",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var isValidResponseCode = responseCode.code === 200;",
+							"tests[\"valid response code\"] = isValidResponseCode;",
+							"if(isValidResponseCode){",
+							"    tests[\"gets all the available doctors\"] = jsonData.length > 0;",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/doctor/",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Creates a new Doctor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"var isValidResponseCode = responseCode.code === 200;",
+							"tests[\"valid response code\"] = isValidResponseCode;",
+							"if(isValidResponseCode){",
+							"    tests[\"response is in common language\"] = responseBody === \"Doctor Created Successfully!\";",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/doctor/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"firtstName\" : \"test\",\n\t\"lastName\" : \"doc\",\n\t\"NPI\":\"1679576722\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Can Find the Created Doctor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var isValidResponseCode = responseCode.code === 200;",
+							"tests[\"valid response code\"] = isValidResponseCode;",
+							"if(isValidResponseCode){",
+							"    tests[\"verify correct doctor is fetched\"] = jsonData.firstName === \"test\" && jsonData.lastName === \"doc\";",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/doctor/1679576722",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"\"\n}"
+				},
+				"description": "finds the created doctor based on their NPI"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Doctor Details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"var isValidResponseCode = responseCode.code === 200;",
+							"tests[\"valid response code\"] = isValidResponseCode;",
+							"if(isValidResponseCode){",
+							"    tests[\"response is in common language\"] = responseBody === \"Doctor Details Updated Successfully!\";",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/doctor/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"firtstName\" : \"George\",\n\t\"lastName\" : \"doc\",\n\t\"NPI\":\"1679576722\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Verifies that doctor details are updated",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var isValidResponseCode = responseCode.code === 200;",
+							"tests[\"valid response code\"] = isValidResponseCode;",
+							"if(isValidResponseCode){",
+							"    tests[\"verify correct doctor is fetched\"] = jsonData.firstName === \"George\" && jsonData.lastName === \"doc\";",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/doctor/1679576722",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "delete doctor from system",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var isValidResponseCode = responseCode.code === 200;",
+							"tests[\"valid response code\"] = isValidResponseCode;",
+							"if(isValidResponseCode){",
+							"    tests[\"response is in common language\"] = responseBody === \"Doctor Deleted Successfully\";",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/doctor/1679576722",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Verifies that doctor is deleted from system",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"cannot find dcotor that has been deleted\"] = responseCode.code === 404;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/doctor/1679576722",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"\"\n}"
+				},
+				"description": "finds the created doctor based on their NPI"
+			},
+			"response": []
+		}
+	]
+}
