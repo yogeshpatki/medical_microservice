@@ -2,7 +2,8 @@ const express = require('express')
 const morgan = require('morgan')
 const bodyParser = require('body-parser');
 //const helmet = require('helmet')
-const api = require('../api/patients')
+const patientApi = require('../api/patients')
+const doctorApi = require('../api/doctors')
 
 const start = (options) => {
   return new Promise((resolve, reject) => {
@@ -22,8 +23,8 @@ const start = (options) => {
       res.status(500).send('Something went wrong!')
     })
 
-    api(app, options)
-
+    patientApi(app, options)
+    doctorApi(app, options)
     const server = app.listen(options.port, () => resolve(server))
   })
 }
