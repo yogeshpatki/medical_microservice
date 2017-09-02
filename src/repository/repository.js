@@ -4,46 +4,73 @@ const repository = (db) => {
   const patients_collection = db.collection('patients')
   const doctors_collection = db.collection('doctors')
 
+ 
   const getAllPatients = () => {
-    return new Promise((resolve, reject) => {
-      const patients = []
-      const cursor = patients_collection.find({}, {title: 1, id: 1})
-      const addPatient = (patient) => {
-        patients.push(patient)
-      }
-      const sendPatients = (err) => {
-        if (err) {
-          reject(new Error('An error occured fetching all patients, err:' + err))
-        }
-        resolve(patients.slice())
-      }
-      cursor.forEach(addPatient, sendPatients)
-    })
-  }
-
-  const getAllDoctors = () => {
-    return new Promise((resolve, reject) => {
-      const doctors = []
-      const cursor = doctors_collection.find({}, {title: 1, id: 1})
-      const addDoctor = (doctor) => {
-        doctors.push(doctors)
-      }
-      const senddoctors = (err) => {
-        if (err) {
-          reject(new Error('An error occured fetching all doctors, err:' + err))
-        }
-        resolve(doctors.slice())
-      }
-      cursor.forEach(addDoctor, senddoctors)
-    })
+    return getAllUsers(patients_collection);
   }
 
   const getPatientByUserId = (userId) => {
     return getUserById(userId,patients_collection);
   }
 
+  const addPatient = (patient) => {
+      return addUser(patient,patients_collection);
+   }
+
+  const updatePatient = (userId,patient) => {
+    const patientToUpdate = {
+        userId:userId
+      };
+    return updateUser(patientToUpdate,patient,patients_collection);
+  }
+
+  const deletePatient = (patientId) => {
+    var user = {userId: patientId};
+    return deleteUser(user,patients_collection)
+  }
+
+
+
+  const getAllDoctors = () => {
+    return getAllUsers(doctors_collection);
+  }
+
   const getDoctorsByUserId = (userId) => {
     return getUserById(userId,doctors_collection);
+  }
+
+  const addDoctor = (doctor) => {
+    return addUser(doctor,doctors_collection);
+  }
+
+ const updateDoctor = (userId,doctor) => {
+    const doctorToUpdate = {
+        userId:userId
+      };
+    return updateUser(doctorToUpdate,doctor,doctors_collection);
+  }
+
+
+  const deleteDoctor = (patientId) => {
+    var user = {userId: patientId};
+    return deleteUser(user,doctors_collection)
+  }
+
+  const getAllUsers = (collection) => {
+    return new Promise((resolve, reject) => {
+      const users = []
+      const cursor = collection.find({}, {title: 1, id: 1})
+      const addUser = (user) => {
+        users.push(user)
+      }
+      const sendUsers = (err) => {
+        if (err) {
+          reject(new Error('An error occured fetching all users, err:' + err))
+        }
+        resolve(users.slice())
+      }
+      cursor.forEach(addUser, sendUsers)
+    })
   }
 
   const getUserById = (userId,collection)=>{
@@ -58,14 +85,6 @@ const repository = (db) => {
     })
   }
 
-  const addPatient = (patient) => {
-      return addUser(patient,patients_collection);
-   }
-
-  const addDoctor = (doctor) => {
-    return addUser(doctor,doctors_collection);
-  }
-
   const addUser = (user,collection) =>{
     return new Promise((resolve, reject) => {
       collection.insertOne(user, (err, user) => {
@@ -75,20 +94,6 @@ const repository = (db) => {
         resolve(user)
       })
     })
-  }
-
-  const updatePatient = (userId,patient) => {
-    const patientToUpdate = {
-        userId:userId
-      };
-    return updateUser(patientToUpdate,patient,patients_collection);
-  }
-
-  const updateDoctor = (userId,doctor) => {
-    const doctorToUpdate = {
-        userId:userId
-      };
-    return updateUser(doctorToUpdate,doctor,doctors_collection);
   }
 
 const updateUser = (user,newUser,collection) => {
@@ -101,16 +106,6 @@ const updateUser = (user,newUser,collection) => {
       })
     })
 }
-
-const deletePatient = (patientId) => {
-    var user = {userId: patientId};
-    return deleteUser(user,patients_collection)
-  }
-
-  const deleteDoctor = (patientId) => {
-    var user = {userId: patientId};
-    return deleteUser(user,doctors_collection)
-  }
 
 const deleteUser = (user,collection) =>{
   return new Promise((resolve, reject) => {
