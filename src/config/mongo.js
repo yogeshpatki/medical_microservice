@@ -3,7 +3,8 @@ const MongoClient = require('mongodb')
 const getMongoURL = (options) => {
   const url = options.servers
     .reduce((prev, cur) => prev + cur + ',', 'mongodb://')
-
+    console.log(`${url.substr(0, url.length - 1)}/${options.db}`);
+  
   return `${url.substr(0, url.length - 1)}/${options.db}`
 }
 
@@ -12,8 +13,7 @@ const connect = (options, mediator) => {
     MongoClient.connect(
       getMongoURL(options), {
         db: options.dbParameters(),
-        server: options.serverParameters(),
-        replset: options.replsetParameters(options.repl)
+        server: options.serverParameters()
       }, (err, db) => {
         if (err) {
           mediator.emit('db.error', err)

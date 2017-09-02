@@ -1,12 +1,10 @@
 const dbSettings = {
-    db: process.env.DB || 'medical-system',
-    user: process.env.DB_USER || 'user',
-    pass: process.env.DB_PASS || 'password',
-    repl: process.env.DB_REPLS || 'rs1',
+    db: 'medical-system',
+    user: 'user',
+    pass: 'password',
+    repl: 'rs1',
     servers: (process.env.DB_SERVERS) ? process.env.DB_SERVERS.split(' ') : [
-      '192.168.99.100:27017',
-      '192.168.99.101:27017',
-      '192.168.99.102:27017'
+      '192.168.0.102:27017'
     ],
     dbParameters: () => ({
       w: 'majority',
