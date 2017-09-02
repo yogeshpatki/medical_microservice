@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
-const helmet = require('helmet')
+const bodyParser = require('body-parser');
+//const helmet = require('helmet')
 const api = require('../api/patients')
 
 const start = (options) => {
@@ -14,7 +15,8 @@ const start = (options) => {
 
     const app = express()
     app.use(morgan('dev'))
-    app.use(helmet())
+    app.use(bodyParser.json());
+   // app.use(helmet())
     app.use((err, req, res, next) => {
       reject(new Error('Something went wrong!, err:' + err))
       res.status(500).send('Something went wrong!')

@@ -32,6 +32,31 @@ const repository = (db) => {
     })
   }
 
+    const addPatient = (patient) => {
+    return new Promise((resolve, reject) => {
+      db.collection('patients').insertOne(patient, (err, patient) => {
+        if (err) {
+          reject(new Error('An error occuered registring a user booking, err:' + err))
+        }
+        resolve(patient)
+      })
+    })
+  }
+
+    const updatePatient = (patientId,patient) => {
+    return new Promise((resolve, reject) => {
+      const patientToUpdate = {
+        user_id:patientId
+      };
+      db.collection('patients').updateOne(patientToUpdate,patient, (err, patient) => {
+        if (err) {
+          reject(new Error('An error occuered registring a user booking, err:' + err))
+        }
+        resolve(patient)
+      })
+    })
+  }
+
   const disconnect = () => {
     db.close()
   }
@@ -39,6 +64,8 @@ const repository = (db) => {
   return Object.create({
     getAllPatients,
     getPatientByUserId,
+    addPatient,
+    updatePatient,
     disconnect
   })
 }

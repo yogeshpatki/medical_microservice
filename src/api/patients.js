@@ -15,4 +15,18 @@ module.exports = (app, options) => {
       res.status(status.OK).json(patient)
     }).catch(next)
   })
+
+   app.post('/patients', (req, res, next) => {
+     console.log(req.body);
+    repo.addPatient(req.body).then(patient => {
+      res.status(status.OK).json(patient)
+    }).catch(next)
+  })
+
+  app.put('/patients/:userId', (req, res, next) => {
+     console.log(req.body);
+    repo.updatePatient(req.params.userId,req.body).then(patient => {
+      res.status(status.OK).json(patient)
+    }).catch(next)
+  })
 }
