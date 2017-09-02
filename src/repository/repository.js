@@ -2,6 +2,7 @@
 
 const repository = (db) => {
   const patients_collection = db.collection('patients')
+  const doctors_collection = db.collection('doctors')
 
   const getAllPatients = () => {
     return new Promise((resolve, reject) => {
@@ -20,15 +21,40 @@ const repository = (db) => {
     })
   }
 
-  const getPatientByUserId = (userId) => {
+  const getAllDoctors = () => {
     return new Promise((resolve, reject) => {
-      const sendPatient = (err, patient) => {
-        if (err) {
-          reject(new Error(`An error occured fetching a patient with id: ${userId}, err: ${err}`))
-        }
-        resolve(patient)
+      const doctors = []
+      const cursor = doctors_collection.find({}, {title: 1, id: 1})
+      const addDoctor = (doctor) => {
+        doctors.push(doctors)
       }
-      patients_collection.findOne({userId: userId}, sendPatient)
+      const senddoctors = (err) => {
+        if (err) {
+          reject(new Error('An error occured fetching all doctors, err:' + err))
+        }
+        resolve(doctors.slice())
+      }
+      cursor.forEach(addDoctor, senddoctors)
+    })
+  }
+
+  const getPatientByUserId = (userId) => {
+    return getUserById(userId,patients_collection);
+  }
+
+  const getDoctorsByUserId = (userId) => {
+    return getUserById(userId,doctors_collection);
+  }
+
+  const getUserById = (userId,collection)=>{
+    return new Promise((resolve, reject) => {
+      const sendUser = (err, user) => {
+        if (err) {
+          reject(new Error(`An error occured fetching a User with id: ${userId}, err: ${err}`))
+        }
+        resolve(user)
+      }
+      collection.findOne({userId: userId}, sendUser)
     })
   }
 
@@ -46,9 +72,9 @@ const repository = (db) => {
     const updatePatient = (patientId,patient) => {
     return new Promise((resolve, reject) => {
       const patientToUpdate = {
-        user_id:patientId
+        userid:patientId
       };
-      db.collection('patients').updateOne(patientToUpdate,patient, (err, patient) => {
+      db.collection('patients').update(patientToUpdate,patient, (err, patient) => {
         if (err) {
           reject(new Error('An error occuered registring a user booking, err:' + err))
         }
@@ -66,6 +92,8 @@ const repository = (db) => {
     getPatientByUserId,
     addPatient,
     updatePatient,
+    getAllDoctors,
+    getDoctorsByUserId,
     disconnect
   })
 }
