@@ -59,7 +59,7 @@ const repository = (db) => {
   const getAllUsers = (collection) => {
     return new Promise((resolve, reject) => {
       const users = []
-      const cursor = collection.find({}, {title: 1, id: 1})
+      const cursor = collection.find({})
       const addUser = (user) => {
         users.push(user)
       }
